@@ -17,7 +17,7 @@ An Open Source, Modular Discord Bot that is written in NodeJS for Server Managem
 | Module Name | Purpose | Commands |
 | --- | --- | --- |
 | autorole | Automatically assigns roles to a user upon joining the server. | None |
-| interactivecli | Turns the console output into an interactive shell which allows for sending messages as the bot. | ``[Channel ID] [Message Content]``, [stop] |
+| interactivecli | Turns the console output into an interactive shell which allows for sending messages as the bot. | ``[Channel ID] [Message Content]``, ``[stop]`` |
 | linkfinder | Allows a user to quickly link a URL to someone in a text channel. | ``/link [search]`` |
 | moderation | Loads other submodules which allows for easier moderating of public servers. | ``/mute [user]``, ``/unmute [user]`` |
 | selfassign | Spawns a dropdown menu message in a specified channel which allows for users to self assign roles. | None |
