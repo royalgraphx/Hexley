@@ -1,0 +1,24 @@
+{
+  "name": "hexley",
+  "version": "1.0.0",
+  "description": "Open Source Discord Bot written in NodeJS for Server Management and Enrichment.",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/royalgraphx/Hexley.git"
+  },
+  "author": "RoyalGraphX",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/royalgraphx/Hexley/issues"
+  },
+  "homepage": "https://github.com/royalgraphx/Hexley#readme",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.3.1"
+  }
+}
