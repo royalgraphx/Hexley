@@ -17,6 +17,16 @@ module.exports = {
         client.destroy(); // Gracefully close the Discord bot connection
         process.exit(0); // Exit the process with a success status code (0)
         return;
+      } else if (input === 'stats') {
+        // Calculate bot's uptime
+        const uptimeInMs = client.uptime;
+        const uptimeInSeconds = Math.floor(uptimeInMs / 1000);
+        const uptimeInMinutes = Math.floor(uptimeInSeconds / 60);
+        const uptimeInHours = Math.floor(uptimeInMinutes / 60);
+        const uptimeInDays = Math.floor(uptimeInHours / 24);
+
+        console.log(`Bot Uptime: ${uptimeInDays} days, ${uptimeInHours % 24} hours, ${uptimeInMinutes % 60} minutes`);
+        return;
       }
 
       // Format for sending messages: "channelID messageContent"

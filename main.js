@@ -14,6 +14,7 @@ const time = require('./modules/time/time');
 const linkfinder = require('./modules/linkfinder/linkfinder');
 const moderation = require('./modules/moderation/moderation');
 const selfassign = require('./modules/selfassign/selfassign');
+const encode = require('./modules/encode/encode');
 
 // const selfassign = require('./modules/selfassign/selfassign');
 
@@ -47,6 +48,7 @@ time.init(client, guildId);
 linkfinder.init(client, guildId);
 moderation.init(client, guildId);
 selfassign.init(client, guildId);
+encode.init(client, guildId)
 
 interactivecli.init(client);
 
