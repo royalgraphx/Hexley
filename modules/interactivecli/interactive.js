@@ -47,6 +47,6 @@ module.exports = {
       }
     });
 
-    console.log('Interactive CLI module: Ready! You can now send messages as the bot.');
+    console.log('Interactive CLI module: Ready! You can now interact with the terminal.');
   },
 };

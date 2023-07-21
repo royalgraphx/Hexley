@@ -17,8 +17,7 @@ const selfassign = require('./modules/selfassign/selfassign');
 const encode = require('./modules/encode/encode');
 const decode = require('./modules/decode/decode');
 const pcifinder = require('./modules/pcifinder/pcifinder');
-
-// const selfassign = require('./modules/selfassign/selfassign');
+const help = require('./modules/help/help');
 
 const interactivecli = require('./modules/interactivecli/interactive');
 
@@ -36,8 +35,8 @@ client.setMaxListeners(20); // Set the maximum number of listeners to 20
 
 // Set Bot Server Variables
 
-const guildId = '1131552514412654683'; // Replace this with your server ID
-const memberRoleId = '1131555928303489024'; // Replace this with "Member" role ID for your server
+const guildId = process.env.GUID_ID; // Replace this with your server ID
+const memberRoleId = process.env.MEMBER_ROLE_ID; // Replace this with "Member" role ID for your server
 
 client.on('ready', () => {
 console.log(`Logged in as ${client.user.tag}`);
@@ -55,6 +54,7 @@ selfassign.init(client, guildId);
 encode.init(client, guildId);
 decode.init(client, guildId);
 pcifinder.init(client, guildId);
+help.init(client, guildId);
 
 interactivecli.init(client);
 
