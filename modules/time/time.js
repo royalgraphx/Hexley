@@ -72,7 +72,7 @@ function init(client, guildId) {
       .setName('time')
       .setDescription('Displays the current time for a given user.')
       .addUserOption((option) =>
-        option.setName('username').setDescription('The user').setRequired(true)
+        option.setName('username').setDescription('The user').setRequired(false) // Set to false to make it optional
       );
 
     // Register the /time command
@@ -89,7 +89,15 @@ function init(client, guildId) {
     if (!interaction.isCommand()) return;
 
     if (interaction.commandName === 'time') {
-      const user = interaction.options.getUser('username').id;
+      let user;
+
+      // Check if the 'username' option is provided
+      if (interaction.options.get('username')) {
+        user = interaction.options.getUser('username').id;
+      } else {
+        // Use the user who issued the command
+        user = interaction.user.id;
+      }
 
       const result = await getTime(user);
 
