@@ -1,8 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-function toDeviceId(hexValue) {	
-  // Remove "0x" prefix and pad it to 8 characters with 0's in front of it	
-  hexValue = hexValue.replace('0x', '').padStart(8, '0');
+function toDeviceId(hexValue) {    
+  // Remove "0x" prefix and pad it to 8 characters with 0's in front of it    
+  hexValue = hexValue.padStart(8, '0');
   
   // Split the hex value into pairs of 2 characters each
   const pairs = hexValue.match(/.{1,2}/g);
@@ -39,11 +39,15 @@ function init(client, guildId) {
     if (!interaction.isCommand()) return;
 
     if (interaction.commandName === 'encodehex') {
-      const hexValue = interaction.options.getString('0x');
+      const originalHexValue = interaction.options.getString('0x');
 
       // Check if hexValue is a valid 4-character alphanumeric string
+      let hexValue = originalHexValue.replace("0x", "")
+      if (hexValue.length % 2 !== 0){
+        hexValue = "0"+hexValue
+      }
       if (!/^[0-9A-Fa-f]{4}$/.test(hexValue)) {
-        await interaction.reply('Invalid device ID. Please provide a valid 4-character alphanumeric string.');
+        await interaction.reply('Invalid device ID. Please provide a valid hex number.');
         return;
       }
 
@@ -55,7 +59,7 @@ function init(client, guildId) {
       // Now, split the littleEndianHex into pairs of 2 characters each and join them with a space
       const formattedHex = littleEndianHex.match(/.{1,2}/g).join('');
 
-      await interaction.reply(`Device ID for 0x${hexValue} is ${formattedHex}`);
+      await interaction.reply(`Device ID for 0x${originalHexValue} is ${formattedHex}`);
     }
   });
 }
