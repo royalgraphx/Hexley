@@ -8,8 +8,19 @@ module.exports = {
     });
 
     rl.on('line', async (line) => {
+      // Trim the input line to remove leading/trailing spaces
+      const input = line.trim();
+
+      if (input === 'stop') {
+        console.log('Stopping the bot...');
+        rl.close(); // Close the readline interface
+        client.destroy(); // Gracefully close the Discord bot connection
+        process.exit(0); // Exit the process with a success status code (0)
+        return;
+      }
+
       // Format for sending messages: "channelID messageContent"
-      const [channelId, ...messageParts] = line.split(' ');
+      const [channelId, ...messageParts] = input.split(' ');
       const messageContent = messageParts.join(' ');
 
       const channel = client.channels.cache.get(channelId);

@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "user": "339415415497424897",
+    "location": "Chicago, Illinois",
+    "latitude": "41.85003",
+    "longitude": "-87.65005"
+  },
+  {
+    "user": "1131553908632846417",
+    "location": "Ashburn, Virginia",
+    "latitude": "39.04372",
+    "longitude": "-77.48749"
+  }
+]
