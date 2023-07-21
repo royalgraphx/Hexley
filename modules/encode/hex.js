@@ -47,7 +47,7 @@ function init(client, guildId) {
         hexValue = "0"+hexValue
       }
       if (!/^[0-9A-Fa-f]{4}$/.test(hexValue)) {
-        await interaction.reply('Invalid device ID. Please provide a valid 4-character alphanumeric string.');
+        await interaction.reply('Invalid device ID. Please provide a valid hex number.');
         return;
       }
 
