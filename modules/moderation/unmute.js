@@ -35,19 +35,19 @@ function init(client, guildId, moderatorRoleId, mutedRoleId) {
 
     if (interaction.commandName === 'unmute') {
       if (!interaction.member.roles.cache.has(moderatorRoleId)) {
-        return interaction.reply({ content: 'You do not have permission to use this command.', ephemeral: true });
+        return interaction.reply({ content: 'You do not have permission to use this command.', ephemeral: false });
       }
 
       const user = interaction.options.getUser('user');
       const member = interaction.guild.members.cache.get(user.id);
 
       if (!member) {
-        return interaction.reply({ content: 'User not found.', ephemeral: true });
+        return interaction.reply({ content: 'User not found.', ephemeral: false });
       }
 
       unmuteUser(member, mutedRoleId);
 
-      interaction.reply({ content: `Unmuted user ${member.user.tag}`, ephemeral: true });
+      interaction.reply({ content: `Unmuted user ${member.user.tag}`, ephemeral: false });
     }
   });
 }

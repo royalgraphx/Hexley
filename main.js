@@ -15,6 +15,8 @@ const linkfinder = require('./modules/linkfinder/linkfinder');
 const moderation = require('./modules/moderation/moderation');
 const selfassign = require('./modules/selfassign/selfassign');
 const encode = require('./modules/encode/encode');
+const decode = require('./modules/decode/decode');
+const pcifinder = require('./modules/pcifinder/pcifinder');
 
 // const selfassign = require('./modules/selfassign/selfassign');
 
@@ -29,6 +31,8 @@ const client = new Client({
     GatewayIntentBits.GuildVoiceStates,
   ],
 });
+
+client.setMaxListeners(20); // Set the maximum number of listeners to 20
 
 // Set Bot Server Variables
 
@@ -48,7 +52,9 @@ time.init(client, guildId);
 linkfinder.init(client, guildId);
 moderation.init(client, guildId);
 selfassign.init(client, guildId);
-encode.init(client, guildId)
+encode.init(client, guildId);
+decode.init(client, guildId);
+pcifinder.init(client, guildId);
 
 interactivecli.init(client);
 

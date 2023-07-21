@@ -10,5 +10,29 @@
     "location": "Ashburn, Virginia",
     "latitude": "39.04372",
     "longitude": "-77.48749"
+  },
+  {
+    "user": "755487116615745607",
+    "location": "jerusalem",
+    "latitude": "31.78336",
+    "longitude": "35.23388"
+  },
+  {
+    "user": "311358385591156736",
+    "location": "Brisbane, Australia",
+    "latitude": "-27.46794",
+    "longitude": "153.02809"
+  },
+  {
+    "user": "883793981169893387",
+    "location": "Europe/Bucharest",
+    "latitude": "44.43225",
+    "longitude": "26.10626"
+  },
+  {
+    "user": "456031892723204096",
+    "location": "Australia/Melbourne",
+    "latitude": "-37.814",
+    "longitude": "144.96332"
   }
 ]

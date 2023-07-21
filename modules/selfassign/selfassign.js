@@ -1,5 +1,3 @@
-// selfassign.js
-
 const { ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 
 const channelId = '1131561391329914961'; // Replace this with the actual text channel ID
@@ -7,33 +5,11 @@ const amdRoleId = '1131587002538672268'; // Replace this with the role ID for AM
 const intelRoleId = '1131586958590754877'; // Replace this with the role ID for Intel
 
 function init(client) {
-  client.on('ready', () => {
-    console.log('selfassign command initializing');
-
-    const selectMenu = new StringSelectMenuBuilder()
-      .setCustomId('selfassign_role')
-      .setPlaceholder('Select a role to self-assign')
-      .addOptions([
-        {
-          label: 'AMD CPU',
-          value: 'amd',
-        },
-        {
-          label: 'Intel CPU',
-          value: 'intel',
-        },
-        // Add more options as needed
-      ]);
-
-    const row = new ActionRowBuilder().addComponents(selectMenu);
-
-    // Send the message to the specified text channel
-     client.channels.cache.get(channelId).send({
-      content: 'Select a role from the dropdown below:',
-      components: [row],
-    });
-
-    console.log('selfassign command initialized');
+  // Add a new command to send the self-assign role message
+  client.on('messageCreate', async (message) => {
+    if (message.content.toLowerCase() === '!setroles') {
+      sendSelfAssignMessage(message);
+    }
   });
 
   // Add interaction handling logic for when a user selects a role from the dropdown
@@ -65,37 +41,64 @@ function init(client) {
     // Acknowledge the interaction with a reply (ephemeral: true means the reply is only visible to the user)
     await interaction.reply({ content: `You have been ${hasRole ? 'removed from' : 'assigned to'} the ${selectedRole.toUpperCase()} role.`, ephemeral: true });
   });
-}
 
-async function assignRole(member, selectedRole) {
-  const roleId = selectedRole === 'amd' ? amdRoleId : intelRoleId;
-  const role = member.guild.roles.cache.get(roleId);
-  if (!role) {
-    console.error(`Role with ID ${roleId} not found.`);
-    return;
+  function sendSelfAssignMessage(message) {
+    const selectMenu = new StringSelectMenuBuilder()
+      .setCustomId('selfassign_role')
+      .setPlaceholder('Select a role to self-assign')
+      .addOptions([
+        {
+          label: 'AMD CPU',
+          value: 'amd',
+        },
+        {
+          label: 'Intel CPU',
+          value: 'intel',
+        },
+        // Add more options as needed
+      ]);
+
+    const row = new ActionRowBuilder().addComponents(selectMenu);
+
+    // Send the message to the specified text channel
+    message.client.channels.cache.get(channelId).send({
+      content: 'Select a role from the dropdown below:',
+      components: [row],
+    });
+
+    console.log('Self-assign role message sent.');
   }
 
-  try {
-    await member.roles.add(role);
-    console.log(`Assigned role ${selectedRole.toUpperCase()} to user ${member.user.tag}`);
-  } catch (error) {
-    console.error('Error assigning role:', error);
-  }
-}
+  async function assignRole(member, selectedRole) {
+    const roleId = selectedRole === 'amd' ? amdRoleId : intelRoleId;
+    const role = member.guild.roles.cache.get(roleId);
+    if (!role) {
+      console.error(`Role with ID ${roleId} not found.`);
+      return;
+    }
 
-async function removeRole(member, selectedRole) {
-  const roleId = selectedRole === 'amd' ? amdRoleId : intelRoleId;
-  const role = member.guild.roles.cache.get(roleId);
-  if (!role) {
-    console.error(`Role with ID ${roleId} not found.`);
-    return;
+    try {
+      await member.roles.add(role);
+      console.log(`Assigned role ${selectedRole.toUpperCase()} to user ${member.user.tag}`);
+    } catch (error) {
+      console.error('Error assigning role:', error);
+    }
   }
 
-  try {
-    await member.roles.remove(role);
-    console.log(`Removed role ${selectedRole.toUpperCase()} from user ${member.user.tag}`);
-  } catch (error) {
-    console.error('Error removing role:', error);
+  async function removeRole(member, selectedRole) {
+    const roleId = selectedRole === 'amd' ? amdRoleId : intelRoleId;
+    const role = member.guild.roles.cache.get(roleId);
+    if (!role) {
+      console.error(`Role with ID ${roleId} not found.`);
+      return;
+    }
+
+    try {
+      await member.roles.remove(role);
+      console.log(`Removed role ${selectedRole.toUpperCase()} from user ${member.user.tag}`);
+    } catch (error) {
+      console.error('Error removing role:', error);
+    }
   }
 }
 
