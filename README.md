@@ -5,7 +5,14 @@
 # Hexley
 An Open Source, Modular Discord Bot that is written in NodeJS for Server Management and Enrichment.
 
-Features:
+<img src="https://discordapp.com/api/guilds/1131552514412654683/widget.png?style=banner2" alt="Discord Banner 2"/>
+
+<br>
+<br>
+
+# Features
+</br>
+</br>
 
 | Module Name | Purpose | Commands |
 | --- | --- | --- |
@@ -60,4 +67,5 @@ chmod +x run.sh
 
 Written within a [DarwinKVM](https://github.com/royalgraphx/DarwinKVM) Virtual Machine!
 
-Join the discord this server lives in!
+Join the [discord](https://discord.gg/ryQFC8Vk7b) this server lives in!
+
