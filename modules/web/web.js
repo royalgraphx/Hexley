@@ -1,8 +1,11 @@
 const express = require('express');
-const path = require('path'); // Import the 'path' module
+const path = require('path');
 
 // Import the uptime module
 const uptimeModule = require('../uptime/uptime');
+
+// Import the modapi.js module
+const modApi = require('../moderation/modapi');
 
 module.exports = (client) => {
   const app = express();
@@ -14,6 +17,34 @@ module.exports = (client) => {
 
     // Send the uptime data as JSON in the response
     res.json({ uptime });
+  });
+
+  // Define a route handler for "/web/moderators"
+  app.get('/moderators', async (req, res) => {
+    try {
+      // Fetch data about users with the moderator role from modapi.js module
+      const moderators = await modApi.fetchModerators();
+
+      // Send the moderator data as JSON in the response
+      res.json({ moderators });
+    } catch (error) {
+      // If an error occurs, send an error response
+      res.status(500).json({ error: 'Failed to fetch moderator data' });
+    }
+  });
+
+   // Define a route handler for "/web/mutedusers"
+   app.get('/mutedusers', async (req, res) => {
+    try {
+      // Fetch data about users with the muted role from modapi.js module
+      const mutedUsers = await modApi.fetchMutedUsers();
+
+      // Send the muted users data as JSON in the response
+      res.json({ mutedUsers });
+    } catch (error) {
+      // If an error occurs, send an error response
+      res.status(500).json({ error: 'Failed to fetch muted users data' });
+    }
   });
 
   // Serve the static HTML file from the 'html' folder

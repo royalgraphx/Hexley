@@ -27,6 +27,8 @@ const uptime = require('./modules/uptime/uptime');
 
 const interactivecli = require('./modules/interactivecli/interactive');
 
+const modApi = require('./modules/moderation/modapi');
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -44,6 +46,8 @@ client.setMaxListeners(20); // Set the maximum number of listeners to 20
 
 const guildId = process.env.GUID_ID; // Replace this with your server ID
 const memberRoleId = process.env.MEMBER_ROLE_ID; // Replace this with "Member" role ID for your server
+const moderatorRoleId = process.env.MODERATOR_ROLE_ID // Replace this with "Moderator" role ID for your server
+const mutedRoleId = process.env.MUTED_ROLE_ID // Replace this with "Muted" role ID for your server
 
 client.on('ready', () => {
 console.log(`Logged in as ${client.user.tag}`);
@@ -56,7 +60,7 @@ verbose.init(client, guildId);
 tzSetter.init(client, guildId);
 time.init(client, guildId);
 linkfinder.init(client, guildId);
-moderation.init(client, guildId);
+moderation.init(client, guildId, memberRoleId);
 selfassign.init(client, guildId);
 encode.init(client, guildId);
 decode.init(client, guildId);
@@ -73,7 +77,10 @@ client.login(process.env.DISCORD_TOKEN);
 
 // Set up the web panel
 const app = express();
-app.use('/web', webPanel(client));
+app.use('/web', webPanel(client, guildId));
+
+// Initialize modApi.js
+modApi.init(client, guildId, mutedRoleId, moderatorRoleId);
 
 // Start the web server
 const PORT = process.env.PORT || 3000;

@@ -19,8 +19,11 @@ body {
 
 .widgets-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    gap: 25px; /* Add spacing between widgets */
+    padding-top: 25px; /* Add padding between top bar and widgets */
+    padding-left: 25px; /* Add padding between left side and widgets */
+    align-items: flex-start;
     height: 100vh;
 }
 
@@ -45,5 +48,28 @@ body {
 /* Uptime widget styles */
 #uptimeWidget {
     background-color: #f0f0f0;
-    width: 300px;
+}
+
+/* Moderators widget styles */
+#moderatorsWidget {
+    background-color: #f0f0f0;
+}
+
+/* Muted widget styles (same as Moderators) */
+#mutedWidget {
+    background-color: #f0f0f0;
+}
+
+.moderator,
+.muted {
+    display: flex; /* Use flexbox layout */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center elements horizontally */
+}
+
+.moderator img,
+.muted img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
 }
