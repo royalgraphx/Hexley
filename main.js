@@ -1,9 +1,13 @@
 const fs = require('fs');
 const { Client, GatewayIntentBits } = require('discord.js');
 const dotenv = require('dotenv');
+const express = require('express');
 
 // Load environment variables from .env file
 dotenv.config();
+
+// Import the webPanel module
+const webPanel = require('./modules/web/web');
 
 // Load Modules
 
@@ -18,6 +22,8 @@ const encode = require('./modules/encode/encode');
 const decode = require('./modules/decode/decode');
 const pcifinder = require('./modules/pcifinder/pcifinder');
 const help = require('./modules/help/help');
+const rp = require('./modules/customrp/rp');
+const uptime = require('./modules/uptime/uptime');
 
 const interactivecli = require('./modules/interactivecli/interactive');
 
@@ -28,6 +34,7 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildPresences,
   ],
 });
 
@@ -55,9 +62,21 @@ encode.init(client, guildId);
 decode.init(client, guildId);
 pcifinder.init(client, guildId);
 help.init(client, guildId);
+rp.init(client);
+uptime.init(client, guildId);
 
 interactivecli.init(client);
 
 // Discord Login
 
 client.login(process.env.DISCORD_TOKEN);
+
+// Set up the web panel
+const app = express();
+app.use('/web', webPanel(client));
+
+// Start the web server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Web panel is running on http://localhost:${PORT}`);
+});

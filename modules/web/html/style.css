@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.top-bar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.top-bar h1 {
+    margin: 0;
+    padding: 0;
+}
+
+.widgets-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.widget {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.widget-top-bar {
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.widget-content {
+    margin-top: 10px;
+}
+
+/* Uptime widget styles */
+#uptimeWidget {
+    background-color: #f0f0f0;
+    width: 300px;
+}
