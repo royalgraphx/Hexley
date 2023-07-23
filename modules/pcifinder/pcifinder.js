@@ -1,19 +1,71 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { parsePCI } = require('./parsePCI');
+const https = require('https');
+
+async function fetchPCIdata() {
+  return new Promise((resolve, reject) => {
+    const url = 'https://raw.githubusercontent.com/pciutils/pciids/master/pci.ids';
+    https.get(url, (response) => {
+      let data = '';
+
+      response.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      response.on('end', () => {
+        resolve(data);
+      });
+    }).on('error', (error) => {
+      reject(error);
+    });
+  });
+}
 
 async function findPCI(vendorId, deviceId) {
-  const pciData = await parsePCI();
-  const vendor = pciData.get(vendorId);
-  if (!vendor) {
-    return 'Vendor not found.';
-  }
+  try {
+    const pciData = await fetchPCIdata();
 
-  const device = vendor.Devices.get(deviceId);
-  if (!device) {
-    return 'Device not found for the given vendor.';
-  }
+    const lines = pciData.split('\n');
+    let currentVendor;
+    let currentDevice;
+    const vendors = new Map();
 
-  return `Vendor: ${vendor.Name}\nDevice: ${device.Name}`;
+    for (const line of lines) {
+      if (line.startsWith('#')) {
+        continue;
+      }
+
+      if (!line.startsWith('\t')) {
+        const [id, name] = line.trim().split('  ');
+        currentVendor = { ID: id, Name: name, Devices: new Map() };
+        vendors.set(id, currentVendor);
+      } else if (line.startsWith('\t\t')) {
+        const [id, name] = line.trim().split('  ');
+        currentDevice = { ID: id, Name: name };
+        currentVendor.Devices.set(id, currentDevice);
+      } else if (line.startsWith('\t')) {
+        const [id, name] = line.trim().split('  ');
+        currentDevice = { ID: id, Name: name };
+        currentVendor.Devices.set(id, currentDevice);
+      }
+    }
+
+    const vendor = vendors.get(vendorId);
+
+    if (!vendor) {
+      return 'Vendor not found.';
+    }
+
+    const device = vendor.Devices.get(deviceId);
+
+    if (!device) {
+      return 'Device not found for the given vendor.';
+    }
+
+    return `Vendor: ${vendor.Name}\nDevice: ${device.Name}`;
+  } catch (error) {
+    console.error('Error fetching PCI data:', error);
+    return 'An error occurred while fetching PCI data. Please try again later.';
+  }
 }
 
 function init(client, guildId) {
