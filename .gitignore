@@ -15,5 +15,5 @@ Thumbs.db
 # Ignore node_modules (optional, but generally recommended)
 node_modules/
 
-# Ignore Data values
-modules/time/timeTable.json
+# Ignore Time module updates
+modules/time/

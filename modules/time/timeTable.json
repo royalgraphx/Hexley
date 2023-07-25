@@ -34,5 +34,11 @@
     "location": "Australia/Melbourne",
     "latitude": "-37.814",
     "longitude": "144.96332"
+  },
+  {
+    "user": "645327646242373682",
+    "location": "Europe/Helsinki",
+    "latitude": "60.16952",
+    "longitude": "24.93545"
   }
 ]
