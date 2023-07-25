@@ -2,6 +2,9 @@ const fs = require('fs');
 const { Client, GatewayIntentBits } = require('discord.js');
 const dotenv = require('dotenv');
 const express = require('express');
+const path = require('path');
+const http = require('http');
+const socketIO = require('socket.io');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -70,6 +73,7 @@ usbfinder.init(client, guildId);
 help.init(client, guildId);
 rp.init(client);
 uptime.init(client, guildId);
+modApi.init(client, guildId, mutedRoleId, moderatorRoleId);
 
 interactivecli.init(client);
 
@@ -77,15 +81,41 @@ interactivecli.init(client);
 
 client.login(process.env.DISCORD_TOKEN);
 
-// Set up the web panel
+// Set up the web panel and WebSocket server
 const app = express();
-app.use('/web', webPanel(client, guildId));
+const server = http.createServer(app);
+const io = socketIO(server);
+app.use('/web', webPanel(client, guildId, moderatorRoleId, mutedRoleId));
 
-// Initialize modApi.js
-modApi.init(client, guildId, mutedRoleId, moderatorRoleId);
+// Define a route handler for "/web/console"
+app.get('/web/console', (req, res) => {
+  // Serve the HTML file that includes the WebSocket client code for the console
+  const consolePagePath = path.join(__dirname, 'modules/web/html/', 'console.html');
+  res.sendFile(consolePagePath);
+});
+
+// Serve the static HTML file from the 'html' folder
+const htmlPath = path.join(__dirname, 'html');
+app.use(express.static(htmlPath));
+
+// WebSocket logic for the console route
+io.of('/console').on('connection', (socket) => {
+  console.log('A client connected to /console.');
+
+  const originalConsoleLog = console.log;
+  console.log = function (...args) {
+    socket.emit('console', args.join(' '));
+    originalConsoleLog.apply(console, args);
+  };
+
+  socket.on('disconnect', () => {
+    console.log('A client disconnected from /console.');
+    console.log = originalConsoleLog;
+  });
+});
 
 // Start the web server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Web panel is running on http://localhost:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Web panel and console WebSocket are running on http://localhost:${PORT}`);
 });

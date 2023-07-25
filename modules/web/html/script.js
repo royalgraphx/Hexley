@@ -51,10 +51,30 @@ function fetchMutedUsersAndPopulateWidget() {
         });
 }
 
+// Function to fetch console output through WebSocket
+function fetchConsoleOutputAndPopulateWidget() {
+    const socket = io('/console');
+  
+    socket.on('connect', () => {
+      console.log('Connected to /console.');
+    });
+  
+    socket.on('console', (data) => {
+      const consoleContent = document.getElementById('consoleContent');
+      consoleContent.innerHTML += `<p>${data}</p>`;
+      console.log('Console output:', data);
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('Disconnected from /console.');
+    });
+}
+
 // Call the functions to initially populate both widgets
 fetchUptimeAndPopulateWidget();
 fetchModeratorsAndPopulateWidget();
 fetchMutedUsersAndPopulateWidget();
+fetchConsoleOutputAndPopulateWidget();
 
 // Optionally, you can set up a timer to refresh the data periodically
 setInterval(fetchUptimeAndPopulateWidget, 60000); // 60000 ms = 1 min
