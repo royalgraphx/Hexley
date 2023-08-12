@@ -70,13 +70,35 @@ function fetchConsoleOutputAndPopulateWidget() {
     });
 }
 
+// Function to fetch data from the API and populate the banned users widget
+function fetchBannedUsersAndPopulateWidget() {
+    fetch('/web/bannedusers')
+        .then(response => response.json())
+        .then(data => {
+            const bannedContent = document.getElementById('bannedContent');
+            // Generate HTML for displaying banned users' information
+            const bannedHTML = data.bannedUsers.map(bannedUser => `
+                <div class="banned">
+                    <img src="${bannedUser.avatarURL}" alt="${bannedUser.username}'s Avatar">
+                    <span>${bannedUser.username}#${bannedUser.discriminator}</span>
+                </div>
+            `).join('');
+            bannedContent.innerHTML = bannedHTML;
+        })
+        .catch(error => {
+            console.error('Error fetching banned users data:', error);
+        });
+}
+
 // Call the functions to initially populate both widgets
 fetchUptimeAndPopulateWidget();
 fetchModeratorsAndPopulateWidget();
 fetchMutedUsersAndPopulateWidget();
 fetchConsoleOutputAndPopulateWidget();
+fetchBannedUsersAndPopulateWidget();
 
 // Optionally, you can set up a timer to refresh the data periodically
 setInterval(fetchUptimeAndPopulateWidget, 60000); // 60000 ms = 1 min
 setInterval(fetchModeratorsAndPopulateWidget, 60000); // 60000 ms = 1 min
 setInterval(fetchMutedUsersAndPopulateWidget, 60000); // 60000 ms = 1 min
+setInterval(fetchBannedUsersAndPopulateWidget, 60000); // 60000 ms = 1 min

@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const fs = require('fs');
 
-const linksFile = './modules/linkfinder/links.json';
+const linksFile = './modules/link/links.json';
 
 function getLinkData(name) {
   try {

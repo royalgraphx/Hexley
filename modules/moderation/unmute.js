@@ -1,5 +1,3 @@
-// unmute.js
-
 const { SlashCommandBuilder } = require('discord.js');
 
 async function unmuteUser(member, mutedRoleId) {
@@ -25,7 +23,9 @@ function init(client, guildId, moderatorRoleId, mutedRoleId) {
       .get(guildId)
       .commands.create(unmuteCommand)
       .then(() => console.log('Registered slash command: unmute'))
-      .catch(console.error);
+      .catch((error) => {
+        console.error('Error occurred while registering slash command: unmute', error);
+      });
 
     console.log('unmute command initialized');
   });

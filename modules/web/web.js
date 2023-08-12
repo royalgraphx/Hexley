@@ -47,6 +47,20 @@ module.exports = (client) => {
     }
   });
 
+    // Define a route handler for "/web/bannedusers"
+    app.get('/bannedusers', async (req, res) => {
+      try {
+        // Fetch data about banned users from modapi.js module
+        const bannedUsers = await modApi.fetchBannedUsers();
+  
+        // Send the banned users data as JSON in the response
+        res.json({ bannedUsers });
+      } catch (error) {
+        // If an error occurs, send an error response
+        res.status(500).json({ error: 'Failed to fetch banned users data' });
+      }
+    });
+
   // Serve the static HTML file from the 'html' folder
   const htmlPath = path.join(__dirname, 'html'); // Get the absolute path to the 'html' folder
   app.use(express.static(htmlPath));

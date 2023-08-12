@@ -17,3 +17,8 @@ node_modules/
 
 # Ignore Time module timeTable.json local copy.
 modules/time/timeTable.json
+
+# Ignore xpSystem module local copy.
+modules/xpSystem/negative_words.txt
+modules/xpSystem/positive_words.txt
+modules/xpSystem/user_xp.json

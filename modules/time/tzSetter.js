@@ -45,7 +45,9 @@ function init(client, guildId) {
       .get(guildId)
       .commands.create(settzCommand)
       .then(() => console.log('Registered slash command: settz'))
-      .catch(console.error);
+      .catch((error) => {
+        console.error('Error occurred while registering slash command: settz', error);
+      });
 
     console.log('tzSetter command initialized');
   });

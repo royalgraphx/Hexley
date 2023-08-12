@@ -80,7 +80,9 @@ function init(client, guildId) {
       .get(guildId)
       .commands.create(timeCommand)
       .then(() => console.log('Registered slash command: time'))
-      .catch(console.error);
+      .catch((error) => {
+        console.error('Error occurred while registering slash command: time', error);
+      });
 
     console.log('time command initialized');
   });

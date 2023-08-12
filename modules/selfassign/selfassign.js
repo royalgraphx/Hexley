@@ -1,8 +1,8 @@
 const { ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 
-const channelId = '1131561391329914961'; // Replace this with the actual text channel ID
-const amdRoleId = '1131587002538672268'; // Replace this with the role ID for AMD
-const intelRoleId = '1131586958590754877'; // Replace this with the role ID for Intel
+const channelId = process.env.SELF_ASSIGN_CHANNEL_ID // Replace this with the actual self assign text channel ID
+const amdRoleId = process.env.AMD_ROLE_ID // Replace this with the role ID for AMD
+const intelRoleId = process.env.INTEL_ROLE_ID // Replace this with the role ID for Intel
 
 function init(client) {
   // Add a new command to send the self-assign role message

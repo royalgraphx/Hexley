@@ -29,7 +29,9 @@ function init(client, guildId) {
       .get(guildId)
       .commands.create(uptimeCommand)
       .then(() => console.log('Registered slash command: uptime'))
-      .catch(console.error);
+      .catch((error) => {
+        console.error('Error occurred while registering slash command: uptime', error);
+      });
 
     console.log('uptime command initialized');
   });

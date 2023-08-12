@@ -13,12 +13,16 @@ dotenv.config();
 const webPanel = require('./modules/web/web');
 
 // Load Modules
+// const deregister = require('./modules/deregister/deregister');
 
 const autorole = require('./modules/autorole/autorole');
 const verbose = require('./modules/verbose/verbose');
+const version = require('./modules/version/version');
 const tzSetter = require('./modules/time/tzSetter');
 const time = require('./modules/time/time');
-const linkfinder = require('./modules/linkfinder/linkfinder');
+const linkfinder = require('./modules/link/linkfinder');
+const linklister = require('./modules/link/linklister');
+const linkadder = require('./modules/link/linkadder');
 const moderation = require('./modules/moderation/moderation');
 const selfassign = require('./modules/selfassign/selfassign');
 const encode = require('./modules/encode/encode');
@@ -28,6 +32,9 @@ const usbfinder = require('./modules/usbfinder/usbfinder');
 const help = require('./modules/help/help');
 const rp = require('./modules/customrp/rp');
 const uptime = require('./modules/uptime/uptime');
+const xpSystem = require('./modules/xpSystem/xpSystem');
+const genplatinfo = require('./modules/genplatinfo/genplatinfo');
+const checkcoverage = require('./modules/checkcoverage/checkcoverage');
 
 const interactivecli = require('./modules/interactivecli/interactive');
 
@@ -44,7 +51,7 @@ const client = new Client({
   ],
 });
 
-client.setMaxListeners(20); // Set the maximum number of listeners to 20
+client.setMaxListeners(30); // Set the maximum number of listeners to 30
 
 // Set Bot Server Variables
 
@@ -53,19 +60,26 @@ const memberRoleId = process.env.MEMBER_ROLE_ID; // Replace this with "Member" r
 const moderatorRoleId = process.env.MODERATOR_ROLE_ID // Replace this with "Moderator" role ID for your server
 const mutedRoleId = process.env.MUTED_ROLE_ID // Replace this with "Muted" role ID for your server
 
+const versionNumber = version.version();
+
 client.on('ready', () => {
 console.log(`Logged in as ${client.user.tag}`);
+console.log(`Current version: ${versionNumber}`);
 });
 
 // initiate the modules
+// deregister.init(client, guildId);
 
+xpSystem.init(client, guildId);
 autorole.init(client, guildId, memberRoleId);
 verbose.init(client, guildId);
 tzSetter.init(client, guildId);
 time.init(client, guildId);
+moderation.init(client, guildId, memberRoleId, dotenv);
 linkfinder.init(client, guildId);
-moderation.init(client, guildId, memberRoleId);
-selfassign.init(client, guildId);
+linklister.init(client, guildId);
+linkadder.init(client, guildId, moderatorRoleId);
+selfassign.init(client, guildId, dotenv);
 encode.init(client, guildId);
 decode.init(client, guildId);
 pcifinder.init(client, guildId);
@@ -73,6 +87,9 @@ usbfinder.init(client, guildId);
 help.init(client, guildId);
 rp.init(client);
 uptime.init(client, guildId);
+version.init(client, guildId);
+genplatinfo.init(client, guildId);
+checkcoverage.init(client, guildId);
 modApi.init(client, guildId, mutedRoleId, moderatorRoleId);
 
 interactivecli.init(client);
@@ -100,7 +117,8 @@ app.use(express.static(htmlPath));
 
 // WebSocket logic for the console route
 io.of('/console').on('connection', (socket) => {
-  console.log('A client connected to /console.');
+  const clientIpAddress = socket.handshake.address.replace(/^.*:/, '');
+  console.log(`A client with IP address ${clientIpAddress} connected to /console.`);
 
   const originalConsoleLog = console.log;
   console.log = function (...args) {
@@ -109,10 +127,11 @@ io.of('/console').on('connection', (socket) => {
   };
 
   socket.on('disconnect', () => {
-    console.log('A client disconnected from /console.');
+    console.log(`A client with IP address ${clientIpAddress} disconnected from /console.`);
     console.log = originalConsoleLog;
   });
 });
+
 
 // Start the web server
 const PORT = process.env.PORT || 3000;

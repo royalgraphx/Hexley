@@ -27,7 +27,7 @@ function updateRichPresence(client) {
       activities: [
         {
           name: 'over DarwinKVM!',
-          type: ActivityType.Watching,
+          type: ActivityType.Watching, // Possible values: 'Playing', 'Listening', 'Watching'
         },
       ],
       status: 'idle', // Possible values: 'online', 'idle', 'dnd', 'invisible'

@@ -1,5 +1,3 @@
-// mute.js
-
 const { SlashCommandBuilder } = require('discord.js');
 
 async function muteUser(member, mutedRoleId) {
@@ -25,7 +23,9 @@ function init(client, guildId, moderatorRoleId, mutedRoleId) {
       .get(guildId)
       .commands.create(muteCommand)
       .then(() => console.log('Registered slash command: mute'))
-      .catch(console.error);
+      .catch((error) => {
+        console.error('Error occurred while registering slash command: mute', error);
+      });
 
     console.log('mute command initialized');
   });

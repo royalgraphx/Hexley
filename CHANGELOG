@@ -1,0 +1,75 @@
+Version 1.1.0
+
+- Introducing new structuring, changelog is now added
+
+Bumps version to 1.1.0
+
+new modules;
+checkcoverage - work in progress command to verify generated serial number is valid or invalid
+deregister - allows a dev to quickly unregister all commands previously registered
+genplatinfo - allows a user to generate Platform Info for use in config.plist
+linkadder - allows a guild moderator to quickly add links to the bot without the need of console/source access
+linklister - allows a user to list all valid link names to be used in link
+ban - allows a guild moderator to ban a user with a specified reason.
+unban - allows a guild moderator to unban a user via User ID
+version - creates a global const of the version for the bot, as well as inits, and handles /version command via discord
+xpSystem - creates a guildwide XP System which rewards users for pos/neg words via a user defined wordlist. /leaderboard is created as well.
+
+changed modules;
+
+customrp - mentions possible entries for current activity
+decode - adds hex.js so a user can now convert back to 0x0000 format
+base64 - adds error if failed to init command
+help - updated to show latest commands
+interactive - complete overhaul, more coming soon
+linkfinder - updated name
+modapi - creates fetchBannedUsers function
+moderation - removes hardcoded role ID's and moves them to .env , also adds ban/unban modules and api
+mute/unmute - adds error console print if failed init command
+pcifinder - adds error console print if failed init command
+selfassign - removes hardcoded role ID's and moves them to .env
+time/tzsetter - adds error console print if failed int command
+uptime - adds error console print if failed int command
+usbfinder - adds error console print if failed int command
+
+
+web panel changes:
+
+web.js - added new banned users route
+style.css - updated theme to dark mode default, stil no option to change it, as well as defined bannedusers module
+script.js - populates banned users widget
+index.html - changes to the ordering of the widgets, as well as added banned users module
+
+gitignore changes:
+
+adds entries for sensitive data held on prod.
+
+
+Version 1.0 -- 22 Total Changes before big update.
+
+*        2 weeks ago  (HEAD -> main, origin/main, origin/HEAD) Adds Console module to Web Panel! (RoyalGraphX)
+*        3 weeks ago  Security Fix - No longer track timeTable.json in git history (RoyalGraphX)
+*        3 weeks ago  USB module added, allows finding of usb devices! (RoyalGraphX)
+*        3 weeks ago  Update README with latest information! (RoyalGraphX)
+*        3 weeks ago  moderation module updated - web api ability added (RoyalGraphX)
+*        3 weeks ago  Web Panel is now working! ; Fixes pcifinder module (vendor 1022 bug) (RoyalGraphX)
+*        3 weeks ago  adds modules customrp, uptime ; Added a Web Panel! (RoyalGraphX)
+*        3 weeks ago  Optional username in /time ; @FinOCE - GH Issue (RoyalGraphX)
+*        3 weeks ago  Adds Help module! Updates interactivecli wording (RoyalGraphX)
+*        3 weeks ago  Update moderation module, adds pcifinder module! (RoyalGraphX)
+*        3 weeks ago  Merge branch 'main' of github.com:royalgraphx/Hexley into main (RoyalGraphX)
+|\  
+| *      3 weeks ago  encode:hex: Correctly converts - thanks to @oq-x for the PR (RoyalGraphX)
+* |      3 weeks ago  encode:hex: correctly converts device id! - thanks to @oq-x for the PR (RoyalGraphX)
+* |      3 weeks ago  encode:hex: Correctly converts - thanks to @oq-x for the PR (RoyalGraphX)
+|/  
+*        3 weeks ago  Add Encode Module, interactivecli: added stats command (RoyalGraphX)
+*        3 weeks ago  README: correct stop command (RoyalGraphX)
+*        3 weeks ago  Merge branch 'main' of github.com:royalgraphx/Hexley into main (RoyalGraphX)
+|\  
+| *      3 weeks ago  Discord now public! (RoyalGraphX)
+* |      3 weeks ago  interactivecli: added stop command (RoyalGraphX)
+|/  
+*        3 weeks ago  Write a quick README (RoyalGraphX)
+*        3 weeks ago  Version 1 Public Release! (RoyalGraphX)
+*        3 weeks ago  Initial commit (RGX)

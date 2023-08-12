@@ -83,7 +83,9 @@ function init(client, guildId) {
       .get(guildId)
       .commands.create(pciCommand)
       .then(() => console.log('Registered slash command: pci'))
-      .catch(console.error);
+      .catch((error) => {
+        console.error('Error occurred while registering slash command: pci', error);
+      });
 
     console.log('pcifinder command initialized');
   });

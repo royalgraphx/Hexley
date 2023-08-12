@@ -73,7 +73,9 @@ function init(client, guildId) {
       .get(guildId)
       .commands.create(usbCommand)
       .then(() => console.log('Registered slash command: usb'))
-      .catch(console.error);
+      .catch((error) => {
+        console.error('Error occurred while registering slash command: usb', error);
+      });
 
     console.log('usbfinder command initialized');
   });

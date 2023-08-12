@@ -20,7 +20,9 @@ function init(client, guildId) {
       .get(guildId)
       .commands.create(decodeBase64Command)
       .then(() => console.log('Registered slash command: decodebase64'))
-      .catch(console.error);
+      .catch((error) => {
+       console.error('Error occurred while registering slash command: decodebase64', error);
+      });
 
     console.log('decodebase64 command initialized');
   });

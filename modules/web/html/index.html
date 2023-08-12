@@ -13,6 +13,16 @@
 
     <div class="widgets-container">
 
+        <div class="widget" id="consoleWidget">
+            <div class="widget-top-bar">Console Module</div>
+            <div class="widget-content" id="consoleContent">
+                <div id="consoleOutputContainer">
+                    <p>Welcome to the console output!</p>
+                    <p>Any console logs from the server will be displayed here.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="widget" id="moderatorsWidget">
             <div class="widget-top-bar">Moderators Module</div>
             <div class="widget-content" id="moderatorsContent">
@@ -27,20 +37,17 @@
             </div>
         </div>
 
+        <div class="widget" id="bannedWidget">
+            <div class="widget-top-bar">Banned Module</div>
+            <div class="widget-content banned" id="bannedContent">
+                <!-- This div will be populated with the data from the /web/bannedusers API -->
+            </div>
+        </div>
+
         <div class="widget" id="uptimeWidget">
             <div class="widget-top-bar">Uptime Module</div>
             <div class="widget-content" id="uptimeContent">
                 <!-- This div will be populated with the data from the /web/uptime API -->
-            </div>
-        </div>
-
-        <div class="widget" id="consoleWidget">
-            <div class="widget-top-bar">Console Module</div>
-            <div class="widget-content" id="consoleContent">
-                <div id="consoleOutputContainer">
-                    <p>Welcome to the console output!</p>
-                    <p>Any console logs from the server will be displayed here.</p>
-                </div>
             </div>
         </div>
 

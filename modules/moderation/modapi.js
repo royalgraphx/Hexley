@@ -64,8 +64,30 @@ async function fetchMutedUsers() {
   }
 }
 
+async function fetchBannedUsers() {
+  try {
+    // Fetch the guild object using the provided guildId
+    const guild = client.guilds.cache.get(guildId);
+    if (!guild) throw new Error('Guild not found');
+
+    // Fetch all banned users from the guild using the bans manager
+    const bannedUsers = await guild.bans.fetch();
+
+    // Return the list of banned users
+    return bannedUsers.map((ban) => ({
+      id: ban.user.id,
+      username: ban.user.username,
+      discriminator: ban.user.discriminator,
+      avatarURL: ban.user.displayAvatarURL({ dynamic: true }),
+    }));
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   init,
   fetchModerators,
   fetchMutedUsers,
+  fetchBannedUsers,
 };
