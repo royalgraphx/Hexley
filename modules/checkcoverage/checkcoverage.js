@@ -1,5 +1,13 @@
+// 
+// Copyright (c) 2023 ExtremeXT - https://github.com/ExtremeXT/PyAppleSerialChecker
+// Copyright (c) 2023 RoyalGraphX - NodeJS Rewrite, then Hexley compatibility rewrite.
+// Copyright (c) 2023 oq-x - Modifications after Hexley rewrite for repairing coverage check.
+// Licensed under the GNU Affero General Public License v3.0. 
+// See LICENSE for details.
+// 
+
 const { SlashCommandBuilder } = require('discord.js');
-const puppeteer = require('puppeteer');
+const axios = require('axios');
 
 async function init(client, guildId) {
   client.on('ready', () => {
@@ -30,96 +38,88 @@ async function init(client, guildId) {
 
     if (interaction.commandName === 'checkcoverage') {
       const serialNumber = interaction.options.getString('serialnumber');
-      let authToken; // Define a variable to store the X-Apple-Auth-Token
-      // Send initial response with captcha image
+      
       await interaction.reply('Loading Captcha...');
 
-      let browser;
+      // Get captcha image and base64 data
+      const user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15";
+      const mainPageResponse = await axios.get('https://checkcoverage.apple.com', {
+        headers: {
+          'User-Agent': user_agent,
+        },
+      });
+      const auth_token = mainPageResponse.headers['x-apple-auth-token'];
 
-      try {
-        browser = await puppeteer.launch({ headless: 'new', executablePath: '/snap/bin/chromium' });
-        const page = await browser.newPage();
+      const captchaResponse = await axios.get('https://checkcoverage.apple.com/api/v1/facade/captcha?type=image', {
+        headers: {
+          'X-Apple-Auth-Token': auth_token,
+          'User-Agent': user_agent,
+          'Accept': 'application/json',
+        },
+      });
 
-         // Capture the response headers
-         page.on('response', async (response) => {
-          if (response.url() === 'https://checkcoverage.apple.com/') {
-            authToken = response.headers()['x-apple-auth-token'];
-            console.log('X-Apple-Auth-Token:', authToken); // Log the token for debugging
-          }
-        });
+      const captcha_binary = captchaResponse.data.binaryValue;
+      const captchaBuffer = Buffer.from(captcha_binary, 'base64');
 
-        await page.goto('https://checkcoverage.apple.com/?locale=en_US', {
-          waitUntil: 'networkidle2',
-        });
+      await interaction.followUp({
+        files: [captchaBuffer],
+        content: 'Please enter the captcha letters from the image:',
+      });
 
-        const captchaImageSelector = 'img[alt="captcha"][class^="Captcha_captcha-image__"]';
-        const captchaImageHandle = await page.$(captchaImageSelector);
+      const filter = m => m.author.id === interaction.user.id;
+      const captchaCollector = interaction.channel.createMessageCollector({ filter, time: 10000 });
 
-        if (captchaImageHandle) {
-          const base64Data = await captchaImageHandle.screenshot({ encoding: 'base64' });
-          const imageBuffer = Buffer.from(base64Data, 'base64');
+      captchaCollector.on('collect', async (msg) => {
+        const captcha_answer = msg.content;
 
-          await interaction.followUp({
-            files: [imageBuffer],
-            content: 'Here is the captcha image. Please enter the captcha letters from the image:',
+        // Get serial status
+        const coverageData = {
+          captchaAnswer: captcha_answer,
+          captchaType: 'image',
+          serialNumber: serialNumber,
+        };
+
+        try {
+          const coverageResponse = await axios.post('https://checkcoverage.apple.com/api/v1/facade/coverage', coverageData, {
+            headers: {
+              'X-Apple-Auth-Token': auth_token,
+              'User-Agent': user_agent,
+            },
           });
 
-          const reply = await interaction.channel.awaitMessages({
-            filter: msg => msg.author.id === interaction.user.id,
-            max: 1,
-            time: 10000,
-            errors: ['time'],
-          });
+          const responseContent = JSON.stringify(coverageResponse.data);
 
-          const captchaAnswer = reply.first().content.trim();
-          console.log('Captcha Answer:', captchaAnswer); // Log the captcha answer for debugging
-
-          const postData = {
-            serialNumber: serialNumber,
-            captchaAnswer: captchaAnswer,
-            captchaType: 'image',
-          };
-
-          const response = await page.evaluate(async (data, authToken) => {
-            const fetchResponse = await fetch('https://checkcoverage.apple.com/api/v1/facade/coverage', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'X-Apple-Auth-Token': authToken, // Include the auth token in the headers
-              },
-              body: JSON.stringify(data),
-            });
-            return fetchResponse.text();
-          }, postData, authToken); // Pass the authToken to the page.evaluate function
-
-          console.log('Response Text:', response); // Log the response
-
-          try {
-            const jsonResponse = JSON.parse(response);
-            let finalMessage = '';
-
-            if (jsonResponse.errorType === 1 && jsonResponse.errorState === 4) {
-              finalMessage = 'Coverage Check for Serial failed, you should be safe using this serial number!';
-            } else {
-              finalMessage = 'Coverage Check for Serial passed, the serial is not safe for use.';
-            }
-
-            await interaction.editReply(finalMessage);
-          } catch (parseError) {
-            console.error('Error parsing JSON response:', parseError);
-            await interaction.followUp('An error occurred while processing the server response.');
+          if (responseContent.includes("Sign in to update purchase date")) {
+            interaction.followUp("❌ Unable to verify purchase date, please regenerate!");
+          } else if (responseContent.includes("Your coverage includes the following benefits") || responseContent.includes("Coverage Expired")) {
+            interaction.followUp("❌ Fully valid, please regenerate!");
+          } else {
+            console.log("Unknown error occurred!");
+            console.log("Response Content:", responseContent); // Print the response content for debugging
+            interaction.followUp("An unknown error occurred. Please try again later.");
           }
-        } else {
-          await interaction.followUp('Captcha image not found. Please try again later.');
+        } catch (error) {
+          const responseContent = JSON.stringify(error.response.data);
+          if (responseContent.includes("Sorry. The code you entered doesn")) {
+            interaction.followUp("❌ Captcha is invalid, please try again!");
+          } else if (responseContent.includes("Please enter a valid serial number.")) {
+            interaction.followUp("✅ Serial is invalid, safe to use!");
+          } else if (responseContent.includes("Sign in to update purchase date")) {
+            interaction.followUp("❌ Unable to verify purchase date, please regenerate!");
+          } else {
+            console.error("An error occurred:", error.message);
+            interaction.followUp("An error occurred while processing your request. Please try again later.");
+          }
+        } finally {
+          captchaCollector.stop(); // Stop collecting messages
         }
-      } catch (error) {
-        console.error('Error:', error);
-        await interaction.followUp('An error occurred while processing your request.');
-      } finally {
-        if (browser) {
-          await browser.close();
+      });
+
+      captchaCollector.on('end', (collected, reason) => {
+        if (reason === 'time') {
+          interaction.followUp('Captcha input timed out.');
         }
-      }
+      });
     }
   });
 }

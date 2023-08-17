@@ -1,8 +1,8 @@
 {
-  "The Guide": "https://royalgraphx.github.io/DarwinKVM/",
-  "DarwinKVM": "https://royalgraphx.github.io/DarwinKVM/",
+  "The Guide": "https://docs.darwinkvm.com/",
+  "DarwinKVM": "https://docs.darwinkvm.com/",
   "Dortania OpenCore Guide": "https://dortania.github.io/OpenCore-Install-Guide/prerequisites.html",
-  "GPU Support Guide": "https://royalgraphx.github.io/DarwinKVM/docs/11-GPUSupport/",
+  "GPU Support Guide": "https://docs.darwinkvm.com/docs/11-GPUSupport/",
   "Lilu": "https://github.com/acidanthera/Lilu/releases",
   "WhateverGreen": "https://github.com/acidanthera/WhateverGreen/releases",
   "AppleMCEReporterDisabler": "https://github.com/acidanthera/bugtracker/files/3703498/AppleMCEReporterDisabler.kext.zip",
@@ -11,5 +11,6 @@
   "Github Repository": "https://github.com/royalgraphx/DarwinKVM",
   "Front Panel Audio Fix": "https://royalgraphx.github.io/DarwinKVM/writeups/04-FrontPanelAudio/index/",
   "LegacyRed": "https://github.com/NootInc/LegacyRed",
-  "macserial": "https://github.com/acidanthera/OpenCorePkg/tree/master/Utilities/macserial"
+  "macserial": "https://github.com/acidanthera/OpenCorePkg/tree/master/Utilities/macserial",
+  "PyAppleSerialChecker": "https://github.com/ExtremeXT/PyAppleSerialChecker"
 }
