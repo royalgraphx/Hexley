@@ -22,3 +22,11 @@ modules/time/timeTable.json
 modules/xpSystem/negative_words.txt
 modules/xpSystem/positive_words.txt
 modules/xpSystem/user_xp.json
+
+# Vulgarity wordlist
+
+modules/moderation/vulgarity_dict.txt
+
+# Ignore userbuild user_builds.json
+
+modules/userbuild/user_builds.json

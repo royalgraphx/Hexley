@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-const versionNumber = '1.1.0';
+const versionNumber = '1.1.1';
 
 // Function to get the version number
 function getVersion() {

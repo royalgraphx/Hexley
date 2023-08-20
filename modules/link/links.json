@@ -12,5 +12,6 @@
   "Front Panel Audio Fix": "https://royalgraphx.github.io/DarwinKVM/writeups/04-FrontPanelAudio/index/",
   "LegacyRed": "https://github.com/NootInc/LegacyRed",
   "macserial": "https://github.com/acidanthera/OpenCorePkg/tree/master/Utilities/macserial",
-  "PyAppleSerialChecker": "https://github.com/ExtremeXT/PyAppleSerialChecker"
+  "PyAppleSerialChecker": "https://github.com/ExtremeXT/PyAppleSerialChecker",
+  "Hexley": "https://github.com/royalgraphx/Hexley/"
 }

@@ -49,6 +49,25 @@ function init(client, guildId) {
         console.error('Error occurred while registering slash command: settz', error);
       });
 
+    // Add /settf command
+    const settfCommand = new SlashCommandBuilder()
+      .setName('settf')
+      .setDescription('Sets the time format.')
+      .addStringOption(option =>
+        option.setName('format')
+          .setDescription('Time format: 12 or 24')
+          .setRequired(true)
+      );
+
+    // Register the /settf command
+    await client.guilds.cache
+      .get(guildId)
+      .commands.create(settfCommand)
+      .then(() => console.log('Registered slash command: settf'))
+      .catch((error) => {
+        console.error('Error occurred while registering slash command: settf', error);
+      });
+
     console.log('tzSetter command initialized');
   });
 
@@ -78,6 +97,7 @@ function init(client, guildId) {
             location,
             latitude: lat,
             longitude: lng,
+            format: '12', // Set default format to 12-hour
           });
         }
 
@@ -87,6 +107,27 @@ function init(client, guildId) {
         await interaction.reply(`Time zone set for ${location}`);
       } else {
         await interaction.reply('No matching location found for the specified query.');
+      }
+    }
+
+    if (interaction.commandName === 'settf') {
+      const format = interaction.options.getString('format');
+
+      if (format !== '12' && format !== '24') {
+        await interaction.reply('Invalid format. Please choose either "12" or "24".');
+        return;
+      }
+
+      // Find user data and update format in timeTable.json
+      const existingData = fs.existsSync(timeTable) ? JSON.parse(fs.readFileSync(timeTable, 'utf8')) : [];
+      const userDataIndex = existingData.findIndex(userData => userData.user === interaction.user.id);
+
+      if (userDataIndex !== -1) {
+        existingData[userDataIndex].format = format;
+        fs.writeFileSync(timeTable, JSON.stringify(existingData, null, 2));
+        await interaction.reply(`Time format set to ${format}-hour.`);
+      } else {
+        await interaction.reply('User data not found. Please use /settz to set your timezone first.');
       }
     }
   });

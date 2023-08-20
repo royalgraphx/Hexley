@@ -1,3 +1,31 @@
+Version 1.1.1
+
+- Adds a few new moderation tools, as well as more commands!
+
+modules/
+
+hash - new command that allows people to hash text using supportes hashes, i.e sha512 included
+
+help - updated to show new commands: settf, build, addbuild, removebuild, updatebuild 
+
+link - Adds some new links, thats all.
+
+moderation - new moderation tools! Vulgarity Filter and Message Rate Limit!
+
+platinfo - lays the groundwork for a new command in the future regarding information on mac models.
+
+time - tzSetter.js has been updated to add a new command that deals with timezone 12/24hr format. time.js has also been updated to handle the new timeTable.json formatting
+
+userbuild - Groundwork for creating, managing, and viewing User PC Builds!
+
+verbose - Implements the usage of the new moderation tools! as well as shows how to configure them.
+
+version - bumps version to 1.1.1 !
+
+.gitignore - adds new ignores for other sensitive user data.
+
+main.js - adds the usage of new mod tools, as well as updates consts being passed through to modules.
+
 Version 1.1.0
 
 - Introducing new structuring, changelog is now added

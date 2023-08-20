@@ -5,13 +5,12 @@ const fs = require('fs');
 const timeTable = 'modules/time/timeTable.json';
 
 function getTime(user) {
-  // Retrieve time zone information from timeTable.json
   const userData = getTimeData(user);
 
   if (userData) {
     const timeZone = userData.timeZone;
+    const timeFormat = userData.format || '12'; // Default to 12-hour format if not specified
 
-    // Fetch current time using the retrieved time zone
     return axios
       .get('http://api.geonames.org/timezoneJSON', {
         params: {
@@ -23,7 +22,7 @@ function getTime(user) {
       })
       .then((response) => {
         const { data } = response;
-        const currentTime = convertTo12HourFormat(data.time);
+        const currentTime = timeFormat === '24' ? data.time : convertTo12HourFormat(data.time);
         return {
           success: true,
           currentTime,
@@ -91,20 +90,23 @@ function init(client, guildId) {
     if (!interaction.isCommand()) return;
 
     if (interaction.commandName === 'time') {
+      let userMention = '';
       let user;
 
       // Check if the 'username' option is provided
       if (interaction.options.get('username')) {
-        user = interaction.options.getUser('username').id;
+        user = interaction.options.getUser('username');
+        userMention = user.username; // Get the username without @ tagging
       } else {
         // Use the user who issued the command
-        user = interaction.user.id;
+        user = interaction.user;
+        userMention = user.username; // Get the username without @ tagging
       }
 
-      const result = await getTime(user);
+      const result = await getTime(user.id);
 
       if (result.success) {
-        await interaction.reply(`Current time for <@${user}> is ${result.currentTime}`);
+        await interaction.reply(`Current time for ${userMention} is ${result.currentTime}`);
       } else {
         await interaction.reply(result.error);
       }

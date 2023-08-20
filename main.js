@@ -25,6 +25,7 @@ const linklister = require('./modules/link/linklister');
 const linkadder = require('./modules/link/linkadder');
 const moderation = require('./modules/moderation/moderation');
 const selfassign = require('./modules/selfassign/selfassign');
+const hash = require('./modules/hash/hash');
 const encode = require('./modules/encode/encode');
 const decode = require('./modules/decode/decode');
 const pcifinder = require('./modules/pcifinder/pcifinder');
@@ -35,6 +36,9 @@ const uptime = require('./modules/uptime/uptime');
 const xpSystem = require('./modules/xpSystem/xpSystem');
 const genplatinfo = require('./modules/genplatinfo/genplatinfo');
 const checkcoverage = require('./modules/checkcoverage/checkcoverage');
+const vulgarityfilter = require('./modules/moderation/vulgarityfilter.js');
+const messageRateLimit = require('./modules/moderation/messagerl');
+const userBuildModule = require('./modules/userbuild/module');
 
 const interactivecli = require('./modules/interactivecli/interactive');
 
@@ -59,6 +63,7 @@ const guildId = process.env.GUID_ID; // Replace this with your server ID
 const memberRoleId = process.env.MEMBER_ROLE_ID; // Replace this with "Member" role ID for your server
 const moderatorRoleId = process.env.MODERATOR_ROLE_ID // Replace this with "Moderator" role ID for your server
 const mutedRoleId = process.env.MUTED_ROLE_ID // Replace this with "Muted" role ID for your server
+const developerRoleId = process.env.DEV_ROLE_ID // Replace with "Developer" Role ID in your server.
 
 const versionNumber = version.version();
 
@@ -72,7 +77,7 @@ console.log(`Current version: ${versionNumber}`);
 
 xpSystem.init(client, guildId);
 autorole.init(client, guildId, memberRoleId);
-verbose.init(client, guildId);
+verbose.init(client, guildId, vulgarityfilter, developerRoleId, moderatorRoleId, messageRateLimit, mutedRoleId);
 tzSetter.init(client, guildId);
 time.init(client, guildId);
 moderation.init(client, guildId, memberRoleId, dotenv);
@@ -80,6 +85,7 @@ linkfinder.init(client, guildId);
 linklister.init(client, guildId);
 linkadder.init(client, guildId, moderatorRoleId);
 selfassign.init(client, guildId, dotenv);
+hash.init(client, guildId);
 encode.init(client, guildId);
 decode.init(client, guildId);
 pcifinder.init(client, guildId);
@@ -90,6 +96,7 @@ uptime.init(client, guildId);
 version.init(client, guildId);
 genplatinfo.init(client, guildId);
 checkcoverage.init(client, guildId);
+userBuildModule.init(client, guildId);
 modApi.init(client, guildId, mutedRoleId, moderatorRoleId);
 
 interactivecli.init(client);
