@@ -6,11 +6,16 @@ const vulgarWords = fs.readFileSync('./modules/moderation/vulgarity_dict.txt', '
 // Export the vulgarity filter function
 module.exports = {
   vulgarityFilter: function(message, developerRoleId, moderatorRoleId) {
+    if (message.author.bot || message.channel.type === 'dm' || message.webhookID) {
+      // Ignore messages from bots, DMs, and webhooks
+      return;
+    }
+
     const content = message.content.toLowerCase();
 
     // Check if the user has the developer or moderator role
-    const hasDeveloperRole = message.member.roles.cache.has(developerRoleId);
-    const hasModeratorRole = message.member.roles.cache.has(moderatorRoleId);
+    const hasDeveloperRole = message.member && message.member.roles.cache.has(developerRoleId);
+    const hasModeratorRole = message.member && message.member.roles.cache.has(moderatorRoleId);
 
     // If the user has the developer or moderator role, allow the message
     if (hasDeveloperRole || hasModeratorRole) {
